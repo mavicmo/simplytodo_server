@@ -34,6 +34,13 @@ const createTodo = async (req, res) => {
 // read all todo
 const getAllToDos = async (req, res) => {
   try {
+    const toDoList = await ToDo.find();
+    res.status(201).json({
+      status: 201,
+      toDoList,
+      message: "Successful reading all toDos",
+      requestAt: new Date().toLocaleString(),
+    });
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -42,9 +49,23 @@ const getAllToDos = async (req, res) => {
     });
   }
 };
-// update a todo
+// update a todo by Id
 const updateToDo = async (req, res) => {
   try {
+    const toDoId = req.params.id;
+    const { name } = req.body;
+    const toDo = await ToDo.findByIdAndUpdate(toDoId, {
+      name: name,
+    });
+
+    console.log(toDo);
+
+    res.status(200).json({
+      status: 200,
+      message: "Success update toDo",
+      toDo,
+      requestAt: new Date().toLocaleString(),
+    });
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -56,6 +77,12 @@ const updateToDo = async (req, res) => {
 // delete a todo
 const deleteAToDo = async (req, res) => {
   try {
+    await ToDo.findByIdAndDelete(req.params.id);
+    return res.status(200).json({
+      status: 200,
+      message: "Success Todo has been deleted",
+      requestAt: new Date().toLocaleString(),
+    });
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -67,6 +94,12 @@ const deleteAToDo = async (req, res) => {
 // delete all todo per user
 const deleteAllTodos = async (req, res) => {
   try {
+    await ToDo.deleteMany();
+    return res.status(200).json({
+      status: 200,
+      message: "Success all ToDos have been deleted",
+      requestAt: new Date().toLocaleString(),
+    });
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -78,6 +111,19 @@ const deleteAllTodos = async (req, res) => {
 // completed a todo
 const completeAToDo = async (req, res) => {
   try {
+    const toDoId = req.params.id;
+    const { completed } = req.body;
+
+    const toDo = await ToDo.findByIdAndUpdate(toDoId, {
+      completed: completed,
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: "success",
+      toDo,
+      requestAt: new Date().toLocaleString(),
+    });
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -89,6 +135,13 @@ const completeAToDo = async (req, res) => {
 
 /* End of ToDo Controller Work */
 
-const toDoCtrl = {};
+const toDoCtrl = {
+  createTodo,
+  getAllToDos,
+  updateToDo,
+  deleteAToDo,
+  deleteAllTodos,
+  completeAToDo,
+};
 
 export default toDoCtrl;
