@@ -3,17 +3,17 @@ import express from "express";
 import cors from "cors";
 
 /* load env vars */
-import dotenv from "dotev";
+import dotenv from "dotenv";
 dotenv.config();
 
 /* PORT */
-const PORT = process.emitWarning.PORT || 3005;
+const PORT = process.env.PORT;
 
 /* Internal Modules */
 import routes from "./routes/index.js";
 
 /* Connect to Mongo DB */
-import "./config/do.connecton.js";
+import "./config/db.connection.js";
 
 /* Setup Express */
 const app = express();
@@ -39,7 +39,9 @@ app.get("/", (req, res) => {
 });
 
 /* Routes */
-app.use("/example", routes.exampleRoutes);
+// app.use("/example", routes.exampleRoutes);
+app.use("/users", routes.usersRoutes);
+app.use("/todo", routes.toDoRoutes);
 
 /* App Listener */
 app.listen(PORT, () => console.log(`Listening on PORT:${PORT}`));
