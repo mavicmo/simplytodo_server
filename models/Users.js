@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 const Users = new Schema(
   {
     firstName: {
@@ -25,7 +27,7 @@ const Users = new Schema(
       type: String,
     },
     toDo: {
-      type: [String],
+      type: [ObjectId],
     },
   },
   {

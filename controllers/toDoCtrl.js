@@ -6,26 +6,32 @@ import User from "../models/Users.js";
 const createTodo = async (req, res) => {
   try {
     // input for todo
-    const { userId, name } = req.body;
 
+    const { userId, name } = req.body;
+    console.log(name);
     const newToDo = new ToDo({
-      name,
+      name: name,
       completed: false,
       userId,
     });
 
     await newToDo.save();
+    await User.updateOne({ _id: userId }, { $push: { toDo: newToDo } });
+    const toDoUser = await User.findOne({ _id: userId });
+    console.log(toDoUser);
+    console.log(User);
     const toDoList = await ToDo.find();
     res.status(201).json({
       status: 201,
       toDoList,
+      toDoUser,
       message: "ToDo was successfully added.",
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
-      message: "Server error",
+      message: `${error}`,
       requestAt: new Date().toLocaleString(),
     });
   }
@@ -57,8 +63,6 @@ const updateToDo = async (req, res) => {
     const toDo = await ToDo.findByIdAndUpdate(toDoId, {
       name: name,
     });
-
-    console.log(toDo);
 
     res.status(200).json({
       status: 200,
