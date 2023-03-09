@@ -16,10 +16,10 @@ const createTodo = async (req, res) => {
     });
 
     await newToDo.save();
+    console.log(newToDo);
     await User.updateOne({ _id: userId }, { $push: { toDo: newToDo } });
     const toDoUser = await User.findOne({ _id: userId });
-    console.log(toDoUser);
-    console.log(User);
+
     const toDoList = await ToDo.find();
     res.status(201).json({
       status: 201,
@@ -40,7 +40,9 @@ const createTodo = async (req, res) => {
 // read all todo
 const getAllToDos = async (req, res) => {
   try {
-    const toDoList = await ToDo.find();
+    const { userId } = req.body;
+    const toDoUser = await User.findOne({ _id: userId });
+    const toDoList = await ToDo.find({ userId: toDoUser });
     res.status(201).json({
       status: 201,
       toDoList,
