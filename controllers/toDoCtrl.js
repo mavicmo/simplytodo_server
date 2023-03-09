@@ -62,15 +62,17 @@ const getAllToDos = async (req, res) => {
 const updateToDo = async (req, res) => {
   try {
     const toDoId = req.params.id;
-    const { name } = req.body;
+    const { userId, name } = req.body;
+
     const toDo = await ToDo.findByIdAndUpdate(toDoId, {
-      name: name,
+      name: name.name,
     });
+    const toDoList = await ToDo.find({ userId: userId });
 
     res.status(200).json({
       status: 200,
       message: "Success update toDo",
-      toDo,
+      toDoList,
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
