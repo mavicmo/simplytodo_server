@@ -8,15 +8,15 @@ const createTodo = async (req, res) => {
     // input for todo
 
     const { userId, name } = req.body;
-    console.log(name);
+
     const newToDo = new ToDo({
-      name: name,
+      name: name.name,
       completed: false,
       userId,
     });
 
     await newToDo.save();
-    console.log(newToDo);
+
     await User.updateOne({ _id: userId }, { $push: { toDo: newToDo } });
     const toDoUser = await User.findOne({ _id: userId });
 
@@ -40,9 +40,10 @@ const createTodo = async (req, res) => {
 // read all todo
 const getAllToDos = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const toDoUser = await User.findOne({ _id: userId });
-    const toDoList = await ToDo.find({ userId: toDoUser });
+    const userId = req.params.id;
+
+    const toDoList = await ToDo.find({ userId: userId });
+
     res.status(201).json({
       status: 201,
       toDoList,
@@ -52,7 +53,7 @@ const getAllToDos = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: 500,
-      message: "Server error",
+      message: `${error}`,
       requestAt: new Date().toLocaleString(),
     });
   }
@@ -84,15 +85,20 @@ const updateToDo = async (req, res) => {
 const deleteAToDo = async (req, res) => {
   try {
     await ToDo.findByIdAndDelete(req.params.id);
+    const newToDoList = await ToDo.find({
+      _id: { $ne: req.params.id },
+    });
+    console.log(newToDoList);
     return res.status(200).json({
       status: 200,
+      newToDoList,
       message: "Success Todo has been deleted",
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
-      message: "Server error",
+      message: `${error}`,
       requestAt: new Date().toLocaleString(),
     });
   }

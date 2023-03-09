@@ -12,7 +12,7 @@ import controllers from "../controllers/index.js";
 router.post("/createToDo", verifyToken, controllers.toDoCtrl.createTodo);
 
 // read todo
-router.get("/", controllers.toDoCtrl.getAllToDos);
+router.get("/:id", controllers.toDoCtrl.getAllToDos);
 
 // update todo
 router.put("/:id", verifyToken, controllers.toDoCtrl.updateToDo);
