@@ -58,6 +58,49 @@ const getAllToDos = async (req, res) => {
     });
   }
 };
+// read all todo not completed
+const notCompleteListOfToDo = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const toDoList = await ToDo.find({ userId: userId, completed: false });
+
+    res.status(201).json({
+      status: 201,
+      toDoList,
+      message: "Successful reading all toDos",
+      requestAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: `${error}`,
+      requestAt: new Date().toLocaleString(),
+    });
+  }
+};
+
+// read all todo completed
+const getAllCompletedToDos = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const toDoList = await ToDo.find({ userId: userId, completed: true });
+
+    res.status(201).json({
+      status: 201,
+      toDoList,
+      message: "Successful reading all completed toDos",
+      requestAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: `${error}`,
+      requestAt: new Date().toLocaleString(),
+    });
+  }
+};
 // update a todo by Id
 const updateToDo = async (req, res) => {
   try {
@@ -127,15 +170,19 @@ const completeAToDo = async (req, res) => {
   try {
     const toDoId = req.params.id;
     const { completed } = req.body;
-
+    console.log(completed);
+    console.log(req.body);
     await ToDo.findByIdAndUpdate(toDoId, {
       completed: completed,
     });
+
+    const toDo = await ToDo.findById(toDoId);
 
     const newToDoList = await ToDo.find();
 
     return res.status(200).json({
       status: 200,
+      toDo,
       newToDoList,
       message: "Success complete",
       requestAt: new Date().toLocaleString(),
@@ -154,10 +201,12 @@ const completeAToDo = async (req, res) => {
 const toDoCtrl = {
   createTodo,
   getAllToDos,
+  notCompleteListOfToDo,
   updateToDo,
   deleteAToDo,
   deleteAllTodos,
   completeAToDo,
+  getAllCompletedToDos,
 };
 
 export default toDoCtrl;

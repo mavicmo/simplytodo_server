@@ -12,9 +12,17 @@ import controllers from "../controllers/index.js";
 router.post("/createToDo", verifyToken, controllers.toDoCtrl.createTodo);
 
 // update complete
-router.put("/complete/:id", controllers.toDoCtrl.completeAToDo);
+router.put("/completeAToDo/:id", controllers.toDoCtrl.completeAToDo);
 
 // read todo
+router.get(
+  "/notCompleteListOfToDo/:id",
+  controllers.toDoCtrl.notCompleteListOfToDo
+);
+router.get(
+  "/completeListOfToDo/:id",
+  controllers.toDoCtrl.getAllCompletedToDos
+);
 router.get("/:id", controllers.toDoCtrl.getAllToDos);
 
 // complete a todo
