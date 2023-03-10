@@ -11,8 +11,13 @@ import controllers from "../controllers/index.js";
 // create todo
 router.post("/createToDo", verifyToken, controllers.toDoCtrl.createTodo);
 
+// update complete
+router.put("/complete/:id", controllers.toDoCtrl.completeAToDo);
+
 // read todo
 router.get("/:id", controllers.toDoCtrl.getAllToDos);
+
+// complete a todo
 
 // update todo
 router.put("/:id", verifyToken, controllers.toDoCtrl.updateToDo);
@@ -22,8 +27,7 @@ router.delete("/:id", verifyToken, controllers.toDoCtrl.deleteAToDo);
 
 // delete all todos
 router.delete("/", verifyToken, controllers.toDoCtrl.deleteAllTodos);
-// complete a todo
-router.patch("/:id", verifyToken, controllers.toDoCtrl.completeAToDo);
+
 /*  */
 
 export { router as toDoRoutes };

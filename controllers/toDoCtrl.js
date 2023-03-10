@@ -90,7 +90,7 @@ const deleteAToDo = async (req, res) => {
     const newToDoList = await ToDo.find({
       _id: { $ne: req.params.id },
     });
-    console.log(newToDoList);
+
     return res.status(200).json({
       status: 200,
       newToDoList,
@@ -128,20 +128,22 @@ const completeAToDo = async (req, res) => {
     const toDoId = req.params.id;
     const { completed } = req.body;
 
-    const toDo = await ToDo.findByIdAndUpdate(toDoId, {
+    await ToDo.findByIdAndUpdate(toDoId, {
       completed: completed,
     });
 
-    res.status(200).json({
+    const newToDoList = await ToDo.find();
+
+    return res.status(200).json({
       status: 200,
-      message: "success",
-      toDo,
+      newToDoList,
+      message: "Success complete",
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
-      message: "Server error",
+      message: `${error}`,
       requestAt: new Date().toLocaleString(),
     });
   }
