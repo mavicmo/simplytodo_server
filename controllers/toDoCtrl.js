@@ -171,7 +171,7 @@ const completeAToDo = async (req, res) => {
     const toDoId = req.params.id;
     const { completed } = req.body;
     console.log(completed);
-    console.log(req.body);
+
     await ToDo.findByIdAndUpdate(toDoId, {
       completed: completed,
     });

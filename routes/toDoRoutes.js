@@ -20,7 +20,7 @@ router.get(
   controllers.toDoCtrl.notCompleteListOfToDo
 );
 router.get(
-  "/completeListOfToDo/:id",
+  "/getAllCompletedToDos/:id",
   controllers.toDoCtrl.getAllCompletedToDos
 );
 router.get("/:id", controllers.toDoCtrl.getAllToDos);
